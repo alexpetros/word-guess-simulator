@@ -47,6 +47,7 @@ class WordGuess():
         self.turn += 1
         if guess == self.word:
             self.victory = True
+            print('You win!')
             return WordGuess.CORRECT * len(self.word)
 
         for i in range(len(guess)):
@@ -62,16 +63,4 @@ class WordGuess():
 
         return hint
 
-
-# If this file is run directly, start an interactive game in the command line
-if __name__ == '__main__':
-    game = WordGuess('tiger')
-    print('Starting a new game!')
-
-    while game.has_guess_left():
-        guess = input(f'{game.MAX_GUESSES - game.turn} guesses left. Enter a guess:\n')
-        result = game.guess_word(guess)
-
-        if result != "":
-            print(result)
 
