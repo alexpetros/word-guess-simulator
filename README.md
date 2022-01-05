@@ -4,3 +4,5 @@ This is a simple recreation of the "guess my word" game most recently popularize
 
 ## Usage
 `python3 src/wordle.py` runs the game with the word "tiger".
+
+You need a file named 'words' in your root directory. You can use your own, or on a *nix system, get one by running `cat /usr/share/dict/words > words` in the source root directory. This file will be ignored by git.
