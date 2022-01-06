@@ -1,4 +1,5 @@
 import sys
+import logging
 
 class WordGuess():
     DICTIONARY_FILE = './words'
@@ -9,16 +10,19 @@ class WordGuess():
     MISPLACED = '?'
     NOT_PRESENT = 'x'
 
-    def __init__(self, word, words_dict = None):
+    def __init__(self, word, word_dict = None):
         """Initialize the game with the word provided, and optionally, the dictionary."""
         self.turn = 0
         self.victory = False
         self.word = word
-        self.words_dict = words_dict
+        self.word_dict = word_dict
 
-        if words_dict == None:
+        if word_dict == None:
             f = open(WordGuess.DICTIONARY_FILE, 'r')
-            self.words_dict = { word.rstrip() for word in f.readlines() }
+            self.word_dict = { word.rstrip() for word in f.readlines() }
+            f.close()
+
+        logging.debug('word is: ' + self.word)
 
     def has_guess_left(self):
         """Return True if the player can still guess again."""
@@ -33,7 +37,7 @@ class WordGuess():
         if len(guess) != len(self.word):
             print(f'Error! Guess should be {len(self.word)} characters long, received: {len(guess)}', file=sys.stderr)
             return ""
-        if guess not in self.words_dict:
+        if guess not in self.word_dict:
             print(f'Error! Word "{guess}" not found in dictionary.', file=sys.stderr)
             return ""
 
@@ -47,7 +51,6 @@ class WordGuess():
         self.turn += 1
         if guess == self.word:
             self.victory = True
-            print('You win!')
             return WordGuess.CORRECT * len(self.word)
 
         for i in range(len(guess)):
