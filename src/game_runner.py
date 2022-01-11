@@ -3,15 +3,17 @@ from game import WordGuess
 
 def play_game(game, player):
     """Play game and return num guesses if win, -1 if loss."""
+    guesses = []
     previous_clue = ("", "")
     while game.has_guess_left():
         guess = player.get_guess(game, previous_clue)
         hint = game.guess_word(guess)
         if hint != "":
+            guesses.append(guess)
             previous_clue = (guess, hint)
 
     result = game.turn if game.victory else -1
-    logging.info(f'Game result: {result}')
+    print(f'{game.word},{result},' + ','.join(g for g in guesses))
     return result
 
 class GameRunner():
