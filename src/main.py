@@ -2,7 +2,7 @@ import logging, sys, argparse
 from players.random_guess import RandomGuessHardMode
 from game_runner import GameRunner
 
-DICTIONARY_FILE = './words'
+DICTIONARY_FILE = './resources/words'
 RESULTS_STRING = 'NumGames:{}, Win%:{}, AvgTurns:{}, InitialWord:{}'
 DEFAULT_LENGTH = 5
 
@@ -11,19 +11,22 @@ parser = argparse.ArgumentParser(prog='run-sims',
                                  description='Run word game simulations.')
 parser.add_argument('num_sims', type=int,
                     help='number of simulations to run')
+parser.add_argument('-d', '--dictionary', metavar='FILEPATH',
+                    help='dictionary of words to use for the game')
 parser.add_argument('-i', '--initial',  metavar='WORD',
                     help='initial guess for each game')
 parser.add_argument('-q', '--quiet', action='store_true',
                     help='suppress output of individual games')
 parser.add_argument('--word-length', metavar='NUM',
                     help='the length of the word to guess')
-parser.add_argument('--debug', action='store_true', help='enable debug output')
 parser.add_argument('-s', '--summary', action='store_true',
                     help='print game summary in final line')
+parser.add_argument('--debug', action='store_true', help='enable debug output')
 args = parser.parse_args()
 
 # Import and clean the words file
-f = open(DICTIONARY_FILE, 'r')
+fp = args.dictionary if args.dictionary is not None else DICTIONARY_FILE
+f = open(fp, 'r')
 word_list = [ word.rstrip() for word in f.readlines() ]
 f.close()
 
