@@ -1,7 +1,7 @@
 import logging, random
 from game import WordGuess
 
-def play_game(game, player, initial=None):
+def play_game(game, player, initial=None, show_games=True):
     """Play game and return num guesses if win, -1 if loss."""
     guesses = []
     previous_clue = ("", "")
@@ -16,12 +16,14 @@ def play_game(game, player, initial=None):
             previous_clue = (guess, hint)
 
     result = game.turn if game.victory else -1
-    print(f'{game.word},{result},' + ','.join(g for g in guesses))
+    if show_games:
+        print(f'{game.word},{result},' + ','.join(g for g in guesses))
     return result
 
 class GameRunner():
-    def __init__(self, word_list, word_size = 5):
+    def __init__(self, word_list, word_size = 5, show_games=True):
         """Initialize the game with properly-sized words."""
+        self.show_games = show_games
         self.word_list = list(filter(
             lambda w: (len(w) == word_size and w[0].islower()), word_list))
 
@@ -34,7 +36,10 @@ class GameRunner():
         total_turns = 0
         for i in range(num_games):
             game = WordGuess(random.choice(self.word_list), self.word_dict)
-            result = play_game(game, playerObj(self.word_list), initial=initial)
+            result = play_game(game,
+                               playerObj(self.word_list),
+                               initial=initial,
+                               show_games=self.show_games)
             if result != -1:
                 num_wins += 1
                 total_turns += result

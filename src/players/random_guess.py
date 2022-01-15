@@ -3,20 +3,14 @@ import random
 import logging
 from game import WordGuess
 
-class HumanPlayer():
-    def get_guess(self, game, previous_clue):
-        print(previous_clue[1])
-        return input(
-            f'{game.MAX_GUESSES - game.turn} guesses left. Enter a guess:\n')
-
-class HardModeBasic():
+class RandomGuessHardMode():
     def __init__(self, words_list):
         word_length = len(words_list[0])
 
         self.words_list = words_list
         self.known_chars = [""] * word_length
         self.invalid_placements = [""] * word_length
-        self.max_chars = { c: word_length for c in string.ascii_lowercase } 
+        self.max_chars = { c: word_length for c in string.ascii_lowercase }
         logging.debug('Starting new game')
 
     def get_guess(self, game, previous_clue):
@@ -35,7 +29,7 @@ class HardModeBasic():
             if previous_clue[1][i] == WordGuess.NOT_PRESENT:
                 self.max_chars[char] = (misplaced_chars.count(char) +
                                         self.known_chars.count(char))
-        
+
         # Filter out all the words that no longer apply
         self.words_list = list(filter(self.is_valid, self.words_list))
         logging.debug(f'Known characters: {self.known_chars}')
