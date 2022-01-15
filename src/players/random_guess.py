@@ -13,6 +13,9 @@ class RandomGuessHardMode():
         self.max_chars = { c: word_length for c in string.ascii_lowercase }
         logging.debug('Starting new game')
 
+    # def get_guess(self, game, previous_clue):
+    #     return random.choice(self.words_list)
+
     def get_guess(self, game, previous_clue):
         logging.debug('Hint is: ' + previous_clue[1])
 
@@ -31,7 +34,7 @@ class RandomGuessHardMode():
                                         self.known_chars.count(char))
 
         # Filter out all the words that no longer apply
-        self.words_list = list(filter(self.is_valid, self.words_list))
+        self.words_list = [ w for w in self.words_list if self.is_valid(w) ]
         logging.debug(f'Known characters: {self.known_chars}')
         logging.debug(f'Invalid placements {self.invalid_placements}')
         logging.debug(f'Max characters: {self.max_chars}')
@@ -46,8 +49,6 @@ class RandomGuessHardMode():
                 return False
             if char in self.invalid_placements[i]:
                 return False
-
-        for char in self.max_chars.keys():
             if word.count(char) > self.max_chars[char]:
                 return False
 
