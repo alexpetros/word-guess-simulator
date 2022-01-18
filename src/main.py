@@ -2,6 +2,7 @@ import logging, sys, argparse
 from players.random_guess import RandomGuessHardMode
 from game_runner import GameRunner
 
+GAME_PLAYER = RandomGuessHardMode
 DICTIONARY_FILE = './resources/words'
 RESULTS_STRING = 'NumGames:{}, Win%:{}, AvgTurns:{}, InitialWord:{}'
 DEFAULT_LENGTH = 5
@@ -44,11 +45,10 @@ if args.initial:
     if args.initial not in word_list:
         raise Exception(f'Initial word {args.initial} not found in dictionary')
 
+# Play game and, if requested by user, output summary
 show_games = not args.quiet
 runner = GameRunner(word_list, length, show_games=show_games)
-result = runner.play_games(args.num_sims, RandomGuessHardMode,
-                           initial=args.initial)
-
+result = runner.play_games(args.num_sims, GAME_PLAYER, initial=args.initial)
 if args.summary:
     print(RESULTS_STRING.format(args.num_sims, result[0] * 100, result[1],
                                 args.initial))

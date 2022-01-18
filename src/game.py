@@ -2,10 +2,25 @@ import sys
 import logging
 
 class WordGuess:
+    """A single play of the word-guessing game.
+
+    WordGuess represents a single run of the guessing game. A game consists of
+    successive guesses until either the word is guessed or the player runs out
+    of turns.
+
+    An instance of WordGuess contains all the relevant information about the
+    game as instance variables, most importantly:
+        - self.turn (starts at 0, increments after a call to self.guess_word)
+        - self.victory (True if the player guessed the correct word, else False)
+        - self.word (the winning word)
+
+    Games cannot be restarted once complete; initialize a new instance if a new
+    game is desired.
+    """
     DICTIONARY_FILE = './words'
     MAX_GUESSES = 6
 
-    # String representations of the hint types
+    # Character representations of the hint types
     CORRECT = '*'
     MISPLACED = '?'
     NOT_PRESENT = 'x'
@@ -29,7 +44,31 @@ class WordGuess:
         return not self.victory and self.turn < WordGuess.MAX_GUESSES
 
     def guess_word(self, guess):
-        """Guess a word and return a hint based on the guess."""
+        """
+        Guess a word, increment self.turns, and return a hint from the guess.
+
+        Each guess returns a hint in the form of a formatted string. Each
+        character in the string will be one of three characters
+
+            - WordGuess.CORRECT ('*')
+            - WordGuess.MISPLACED ('?')
+            - WordGuess.NOT_PRESENT ('x')
+
+        where the character in parethenthesis is the printed form. For example,
+        if the game word is "spear" and the function is called with "spark", it
+        will return "**??x"; the first two letters are correct, the second two
+        are present in the word but misplaced, and the final one is not present
+        at all.
+
+        Note that if the word only includes one instance of a character but the
+        guess includes two, the second letter will be marked as if it were an
+        entirely different character i.e. if the letter "a" appears once in a
+        word, the second "a" in the guess will be marked at NOT_PRESENT.
+
+        While the hint characters are unlikely to change, it is best to refer to
+        the hint characters using their class constants instead of their
+        character value for readability purposes.
+        """
         if not self.has_guess_left():
             raise Exception('Attempted to guess word for game that is over. Aborting.')
         if len(guess) != len(self.word):
