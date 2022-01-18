@@ -1,7 +1,7 @@
 import sys
 import logging
 
-class WordGuess():
+class WordGuess:
     DICTIONARY_FILE = './words'
     MAX_GUESSES = 6
 
@@ -10,14 +10,14 @@ class WordGuess():
     MISPLACED = '?'
     NOT_PRESENT = 'x'
 
-    def __init__(self, word, word_dict = None):
-        """Initialize the game with the word provided, and optionally, the dictionary."""
+    def __init__(self, word, word_dict=None):
+        """Initialize a new word game."""
         self.turn = 0
         self.victory = False
         self.word = word
         self.word_dict = word_dict
 
-        if word_dict == None:
+        if word_dict is None:
             f = open(WordGuess.DICTIONARY_FILE, 'r')
             self.word_dict = { word.rstrip() for word in f.readlines() }
             f.close()
@@ -29,9 +29,7 @@ class WordGuess():
         return not self.victory and self.turn < WordGuess.MAX_GUESSES
 
     def guess_word(self, guess):
-        """Guess a word and return a string that describes how close the guess was."""
-
-        # Handle error cases
+        """Guess a word and return a hint based on the guess."""
         if not self.has_guess_left():
             raise Exception('Attempted to guess word for game that is over. Aborting.')
         if len(guess) != len(self.word):
@@ -40,7 +38,6 @@ class WordGuess():
         if guess not in self.word_dict:
             print(f'Error! Word "{guess}" not found in dictionary.', file=sys.stderr)
             return ""
-
 
         # Generate character map
         word_list = list(self.word)

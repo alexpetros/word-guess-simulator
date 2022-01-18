@@ -1,4 +1,4 @@
-import logging, random
+import random
 from game import WordGuess
 
 def play_game(game, player, initial=None, show_games=True):
@@ -20,8 +20,8 @@ def play_game(game, player, initial=None, show_games=True):
         print(f'{game.word},{result},' + ','.join(g for g in guesses))
     return result
 
-class GameRunner():
-    def __init__(self, word_list, word_size = 5, show_games=True):
+class GameRunner:
+    def __init__(self, word_list, word_size=5, show_games=True):
         """Initialize the game with properly-sized words."""
         self.show_games = show_games
         self.word_list = list(filter(
@@ -36,13 +36,11 @@ class GameRunner():
         total_turns = 0
         for i in range(num_games):
             game = WordGuess(random.choice(self.word_list), self.word_dict)
-            result = play_game(game,
-                               playerObj(self.word_list),
-                               initial=initial,
+            result = play_game(game, playerObj(self.word_list), initial=initial,
                                show_games=self.show_games)
             if result != -1:
                 num_wins += 1
                 total_turns += result
 
-        return (num_wins/num_games, total_turns/num_games)
+        return num_wins / num_games, total_turns / num_games
 
