@@ -21,7 +21,8 @@ If you'd like, you can submit a PR with your own Player AI. To do so, simply wri
 The docstrings should provide sufficient information about the class structure, and please submit an issue or PR if something is ambiguous.
 
 ## Output
-The program will run and output the results of each game in a structure format. For instance, here is a run of 10 games, with the summary option at the end to tell us how the AI did:
+### Format
+The program will run and output the results of each game in a structured format. For instance, here is a run of 10 games, with the summary option at the end to tell us how the AI did:
 
 ```
 $ ./run-sims.sh 10 --summary
@@ -40,9 +41,26 @@ NumGames:10, Win%:70.0, AvgTurns:2.6, InitialWord:None
 
 The results are ouput in a comma-separated format. The first field is the winning word; the second field is the number of guesses it took the computer to reach it, with a -1 if it lost; the remaining fields are the guesses that the computer gave. Omitting the `--summary` option will just print the results of each game without the final summary. Were you to provide an initial word with `--initial`, the first guess (the third field in the output) would always be that word.
 
+### Scripts
+I formatted the output to generalize the game as much as possible, so the summary has to be easily separated from the main output (the list of games). This is great for aggregating games, but it makes aggregating *summaries* very annoying. To simplify it a bit, you can use to `--quiet` option along with `--summary` (short form: `-qs`) to just output the summary. This is very useful if you want to run the script many times with many different starting words. Let's say you had a list of newline-separated words `initial-words` you wanted to try, you could run:
+
+```
+cat initial-words | xargs -n1 ./run-sims.sh -qs 100 -i
+```
+
+And it would print only the summary of how each word performed. Note the `-n1` argument to `xargs`, which tells `xargs` to invoke a new `./run-sims.sh` for every single word; without that, it would try to call the script with every single word at once. See the `xargs` manual for more.
+
+Finally, that summary format is a bit annoying (sorry), but if you replace the colons with commas, you can quickly turn it into a format that is a lot more easily processed:
+
+```
+cat word-summaries | tr : , | cut -d , -f 2,4,6,8
+```
+
+This takes a file of summaries called `word-summaries`, replaces the colons with commans, and then selects the even-numbered fields delineated by those commands.
+
 ## Acknowledgements
 Josh Wardle for the inspiration to tackle this game; check out his take on the guessing game in [this repo](https://github.com/powerlanguage/guess-my-word).
 
 Peter Norvig for the [ngrams](https://norvig.com/ngrams/) that were used to generate the word list.
 
-The Dartmouth Computer Science department for making me implement like three different games with this paradigm.
+Every computer science teacher I've that made me implement a different game with this paradigm.
